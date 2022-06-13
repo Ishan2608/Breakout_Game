@@ -20,15 +20,6 @@ score = Scoreboard(lives=5)
 paddle = Paddle()
 bricks = Bricks()
 
-# writer = tr.Turtle()
-# writer.color('red')
-# writer.hideturtle()
-# writer.penup()
-#
-# for brick in bricks.bricks:
-#     writer.goto(brick.xcor(), brick.ycor())
-#     writer.write(f"{brick.quantity}", align='center', font=('Courier', 12, 'normal'))
-
 
 ball = Ball()
 
@@ -64,7 +55,7 @@ def check_collision_with_walls():
         ball.bounce(x_bounce=False, y_bounce=True)
         return
 
-    # detect collision with bottom ball
+    # detect collision with bottom wall
     # In this case, user failed to hit the ball thus he loses. The game resets.
     if ball.ycor() < -280:
         ball.reset()
