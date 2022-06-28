@@ -63,7 +63,7 @@ def check_collision_with_walls():
         if score.lives == 0:
             score.reset()
             playing_game = False
-            ui.game_over()
+            ui.game_over(win=False)
             return
         ui.change_color()
         return
@@ -149,7 +149,7 @@ while playing_game:
         # ----------------UPDATE SCREEN WITH ALL THE MOTION THAT HAS HAPPENED----------------
 
         screen.update()
-        time.sleep(0.01)
+        time.sleep(0.02)
         ball.move()
 
         # ---------------------------DETECTING COLLISION WITH WALLS---------------------------
@@ -163,6 +163,12 @@ while playing_game:
         # ---------------------------DETECTING COLLISION WITH A BRICK---------------------------
 
         check_collision_with_bricks()
+
+        # -------------------------------DETECTING USER'S VICTORY-------------------------------
+
+        if len(bricks.bricks) == 0:
+            ui.game_over(win=True)
+            break
 
     else:
         ui.paused_status()

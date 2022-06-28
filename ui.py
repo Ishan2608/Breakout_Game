@@ -36,6 +36,9 @@ class UI(Turtle):
         self.change_color()
         time.sleep(0.5)
 
-    def game_over(self):
+    def game_over(self, win):
         self.clear()
-        self.write("Game is Over", align='center', font=FONT)
+        if win == True:
+            self.write('You Cleared the Game', align='center', font=FONT)
+        else:
+            self.write("Game is Over", align='center', font=FONT)

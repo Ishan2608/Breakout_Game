@@ -34,7 +34,7 @@ class Bricks:
         self.create_all_lanes()
 
     def create_lane(self, y_cor):
-        for i in range(-570, 650, 62):
+        for i in range(-570, 570, 63):
             brick = Brick(i, y_cor)
             self.bricks.append(brick)
 
