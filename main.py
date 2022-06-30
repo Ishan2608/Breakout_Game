@@ -19,8 +19,6 @@ ui.header()
 score = Scoreboard(lives=5)
 paddle = Paddle()
 bricks = Bricks()
-
-
 ball = Ball()
 
 game_paused = False
@@ -51,7 +49,7 @@ def check_collision_with_walls():
         return
 
     # detect collision with upper ball
-    if ball.ycor() > 270:
+    if ball.ycor() > 280:
         ball.bounce(x_bounce=False, y_bounce=True)
         return
 
@@ -92,8 +90,8 @@ def check_collision_with_paddle():
 
         # If Paddle is left of Screen
         elif paddle_x < 0:
+            # If ball hits paddle's left side it should go back to left
             if ball_x < paddle_x:
-                # If ball hits paddles left side it should go back to left
                 ball.bounce(x_bounce=True, y_bounce=True)
                 return
             else:
@@ -102,15 +100,8 @@ def check_collision_with_paddle():
 
         # Else Paddle is in the Middle horizontally
         else:
-            if ball_x > paddle_x:
-                ball.bounce(x_bounce=True, y_bounce=True)
-                return
-            elif ball_x < paddle_x:
-                ball.bounce(x_bounce=True, y_bounce=True)
-                return
-            else:
-                ball.bounce(x_bounce=False, y_bounce=True)
-                return
+            ball.bounce(x_bounce=False, y_bounce=True)
+            return
 
 
 def check_collision_with_bricks():
@@ -125,20 +116,12 @@ def check_collision_with_bricks():
                 brick.goto(3000, 3000)
                 bricks.bricks.remove(brick)
 
-            # detect collision from left
-            if ball.xcor() < brick.left_wall:
+            # detect collision from left and right
+            if ball.xcor() < brick.left_wall or ball.xcor() > brick.right_wall:
                 ball.bounce(x_bounce=True, y_bounce=False)
 
-            # detect collision from right
-            elif ball.xcor() > brick.right_wall:
-                ball.bounce(x_bounce=True, y_bounce=False)
-
-            # detect collision from bottom
-            elif ball.ycor() < brick.bottom_wall:
-                ball.bounce(x_bounce=False, y_bounce=True)
-
-            # detect collision from top
-            elif ball.ycor() > brick.upper_wall:
+            # detect collision from bottom and top
+            elif ball.ycor() < brick.bottom_wall or ball.ycor() > brick.upper_wall:
                 ball.bounce(x_bounce=False, y_bounce=True)
 
 
@@ -149,7 +132,7 @@ while playing_game:
         # ----------------UPDATE SCREEN WITH ALL THE MOTION THAT HAS HAPPENED----------------
 
         screen.update()
-        time.sleep(0.02)
+        time.sleep(0.03)
         ball.move()
 
         # ---------------------------DETECTING COLLISION WITH WALLS---------------------------
