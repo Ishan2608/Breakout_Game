@@ -14,10 +14,9 @@ class Brick(Turtle):
         self.penup()
         self.shape('square')
         self.shapesize(stretch_wid=1.5, stretch_len=3)
+        self.quantity = random.choice(weights)
         self.color(random.choice(COLOR_LIST))
         self.goto(x=x_cor, y=y_cor)
-
-        self.quantity = random.choice(weights)
 
         # Defining borders of the brick
         self.left_wall = self.xcor() - 30
@@ -25,11 +24,14 @@ class Brick(Turtle):
         self.upper_wall = self.ycor() + 15
         self.bottom_wall = self.ycor() - 15
 
+    def brick_reset(self):
+        self.clear()
+
 
 class Bricks:
     def __init__(self):
         self.y_start = 0
-        self.y_end = 240
+        self.y_end = 200
         self.bricks = []
         self.create_all_lanes()
 
@@ -39,5 +41,9 @@ class Bricks:
             self.bricks.append(brick)
 
     def create_all_lanes(self):
-        for i in range(self.y_start, self.y_end, 32):
+        for i in range(self.y_start, self.y_end, 33):
             self.create_lane(i)
+
+    def bricks_reset(self):
+        for brick in self.bricks:
+            brick.brick_reset()

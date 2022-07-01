@@ -10,6 +10,10 @@ COLOR_LIST = ['light blue', 'royal blue', 'light steel blue', 'steel blue',
               'light cyan', 'light sky blue', 'violet', 'salmon', 'tomato',
               'sandy brown', 'purple', 'deep pink', 'medium sea green', 'khaki']
 
+INSTRUCTIONS = """
+Press Spacebar to PAUSE or RESUME the Game.
+"""
+
 
 class UI(Turtle):
     def __init__(self):
@@ -23,8 +27,8 @@ class UI(Turtle):
         self.clear()
         self.goto(x=0, y=-150)
         self.write('Breakout', align=ALIGNMENT, font=FONT)
-        self.goto(x=0, y=-180)
-        self.write('Press Space to PAUSE or RESUME the Game', align=ALIGNMENT, font=('Calibri', 14, 'normal'))
+        self.goto(x=0, y=-200)
+        self.write(INSTRUCTIONS, align=ALIGNMENT, font=('Calibri', 12, 'italic'))
 
     def change_color(self):
         self.clear()
@@ -38,7 +42,10 @@ class UI(Turtle):
 
     def game_over(self, win):
         self.clear()
-        if win == True:
+        if win:
             self.write('You Cleared the Game', align='center', font=FONT)
         else:
             self.write("Game is Over", align='center', font=FONT)
+
+    def ui_reset(self):
+        self.clear()

@@ -41,3 +41,5 @@ class Scoreboard(Turtle):
         self.update_score()
         open('highestScore.txt', 'w').write(str(self.highScore))
 
+    def scoreboard_reset(self):
+        self.clear()

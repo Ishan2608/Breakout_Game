@@ -28,3 +28,6 @@ class Ball(Turtle):
     def reset(self):
         self.goto(x=0, y=-240)
         self.y_move_dist = 10
+
+    def ball_reset(self):
+        self.clear()

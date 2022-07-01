@@ -6,21 +6,21 @@ from ui import UI
 from bricks import Bricks
 import time
 
-
+# ---------------------------SETTING UP OUR SCREEN---------------------------
 screen = tr.Screen()
 screen.setup(width=1200, height=600)
 screen.bgcolor('black')
 screen.title('Breakout')
 screen.tracer(0)
 
+# ----------------------------CREATING OUR OBJECTS----------------------------
 ui = UI()
-ui.header()
-
 score = Scoreboard(lives=5)
 paddle = Paddle()
 bricks = Bricks()
 ball = Ball()
 
+# --------------------GLOBAL VARIABLES FOR RUNNING THE GAME--------------------
 game_paused = False
 playing_game = True
 
@@ -33,10 +33,13 @@ def pause_game():
         game_paused = True
 
 
+# ------------------------SETTING OUR SCREEN LISTENERS------------------------
 screen.listen()
 screen.onkey(key='Left', fun=paddle.move_left)
 screen.onkey(key='Right', fun=paddle.move_right)
 screen.onkey(key='space', fun=pause_game)
+
+# ----------------MAKING THE FUNCTIONS THAT MAKE THE GAME WORK----------------
 
 
 def check_collision_with_walls():
@@ -116,45 +119,51 @@ def check_collision_with_bricks():
                 brick.goto(3000, 3000)
                 bricks.bricks.remove(brick)
 
-            # detect collision from left and right
+            # detect collision from left or right
             if ball.xcor() < brick.left_wall or ball.xcor() > brick.right_wall:
                 ball.bounce(x_bounce=True, y_bounce=False)
+                return
 
-            # detect collision from bottom and top
+            # detect collision from bottom or top
             elif ball.ycor() < brick.bottom_wall or ball.ycor() > brick.upper_wall:
                 ball.bounce(x_bounce=False, y_bounce=True)
+                return
 
 
-while playing_game:
+def play_breakout():
+    global playing_game, game_paused
+    while playing_game:
+        if not game_paused:
 
-    if not game_paused:
+            # ----------------UPDATE SCREEN WITH ALL THE MOTION THAT HAS HAPPENED----------------
 
-        # ----------------UPDATE SCREEN WITH ALL THE MOTION THAT HAS HAPPENED----------------
+            screen.update()
+            time.sleep(0.03)
+            ball.move()
 
-        screen.update()
-        time.sleep(0.03)
-        ball.move()
+            # ---------------------------DETECTING COLLISION WITH WALLS---------------------------
 
-        # ---------------------------DETECTING COLLISION WITH WALLS---------------------------
+            check_collision_with_walls()
 
-        check_collision_with_walls()
+            # -------------------------DETECTING COLLISION WITH THE PADDLE-------------------------
 
-        # -------------------------DETECTING COLLISION WITH THE PADDLE-------------------------
+            check_collision_with_paddle()
 
-        check_collision_with_paddle()
+            # ---------------------------DETECTING COLLISION WITH A BRICK---------------------------
 
-        # ---------------------------DETECTING COLLISION WITH A BRICK---------------------------
+            check_collision_with_bricks()
 
-        check_collision_with_bricks()
+            # -------------------------------DETECTING USER'S VICTORY-------------------------------
 
-        # -------------------------------DETECTING USER'S VICTORY-------------------------------
+            if len(bricks.bricks) == 0:
+                ui.game_over(win=True)
+                break
 
-        if len(bricks.bricks) == 0:
-            ui.game_over(win=True)
-            break
+        else:
+            ui.paused_status()
 
-    else:
-        ui.paused_status()
 
+# ------------------CALL THE MAIN FUNCTION THAT RUNS THE GAME------------------
+play_breakout()
 
 tr.mainloop()
