@@ -1,7 +1,7 @@
 from turtle import Turtle
 
 
-MOVE_DIST = 70
+MOVE_DIST = 60
 
 
 class Paddle(Turtle):
@@ -14,9 +14,13 @@ class Paddle(Turtle):
         self.goto(x=0, y=-280)
 
     def move_left(self):
+        if self.xcor() <= -490:
+            return
         self.backward(MOVE_DIST)
 
     def move_right(self):
+        if self.xcor() >= 490:
+            return
         self.forward(MOVE_DIST)
 
     def paddle_reset(self):
