@@ -9,8 +9,8 @@ import time
 # ---------------------------SETTING UP OUR SCREEN---------------------------
 screen = tr.Screen()
 screen.setup(width=1200, height=600)
-screen.bgcolor('black')
 screen.title('Breakout')
+screen.bgcolor('black')
 screen.tracer(0)
 
 # ----------------------------CREATING OUR OBJECTS----------------------------
@@ -39,7 +39,6 @@ screen.onkey(key='Left', fun=paddle.move_left)
 screen.onkey(key='Right', fun=paddle.move_right)
 screen.onkey(key='space', fun=pause_game)
 
-
 # ------------DEFINING FUNCTIONS TO MAKE THE GAME OBJECTS INTERACT------------
 
 
@@ -51,7 +50,7 @@ def check_collision_with_walls(ball, score, ui):
         return
 
     # detect collision with upper ball
-    if ball.ycor() > 280:
+    if ball.ycor() > 277:
         ball.bounce(x_bounce=False, y_bounce=True)
         return
 
@@ -105,64 +104,54 @@ def check_collision_with_paddle(ball, paddle):
 
 
 def check_collision_with_bricks(ball, score, bricks):
-    if len(bricks.bricks) == 0:
-        ui.game_over(win=True)
-        return True
-    else:
-        for brick in bricks.bricks:
-            if ball.distance(brick) < 40:
-                score.increase_score()
-                brick.quantity -= 1
-                if brick.quantity == 0:
-                    brick.clear()
-                    brick.goto(3000, 3000)
-                    bricks.bricks.remove(brick)
+    for brick in bricks.bricks:
+        if ball.distance(brick) < 40:
+            score.increase_score()
+            brick.quantity -= 1
+            if brick.quantity == 0:
+                brick.clear()
+                brick.goto(3000, 3000)
+                bricks.bricks.remove(brick)
 
-                # detect collision from left or right
-                if ball.xcor() < brick.left_wall or ball.xcor() > brick.right_wall:
-                    ball.bounce(x_bounce=True, y_bounce=False)
-                    return
+            # detect collision from left or right
+            if ball.xcor() < brick.left_wall or ball.xcor() > brick.right_wall:
+                ball.bounce(x_bounce=True, y_bounce=False)
+                return
 
-                # detect collision from bottom or top
-                elif ball.ycor() < brick.bottom_wall or ball.ycor() > brick.upper_wall:
-                    ball.bounce(x_bounce=False, y_bounce=True)
-                    return
-        return False
+            # detect collision from bottom or top
+            elif ball.ycor() < brick.bottom_wall or ball.ycor() > brick.upper_wall:
+                ball.bounce(x_bounce=False, y_bounce=True)
+                return
 
 
-def play_breakout():
+def play_breakout(paddle, ball, bricks, score, ui):
     global playing_game, game_paused
     while playing_game:
         if not game_paused:
 
             # ----------------UPDATE SCREEN WITH ALL THE MOTION THAT HAS HAPPENED----------------
-
             screen.update()
             time.sleep(0.03)
             ball.move()
 
             # ---------------------------DETECTING COLLISION WITH WALLS---------------------------
-
             check_collision_with_walls(ball, score, ui)
 
             # -------------------------DETECTING COLLISION WITH THE PADDLE-------------------------
-
             check_collision_with_paddle(ball, paddle)
 
             # ---------------------------DETECTING COLLISION WITH A BRICK---------------------------
-
-            b = check_collision_with_bricks(ball, score, bricks)
+            check_collision_with_bricks(ball, score, bricks)
 
             # -------------------------------DETECTING USER'S VICTORY-------------------------------
-
-            if b:
-                break
+            if len(bricks.bricks) == 0:
+                ui.game_over(win=True)
 
         else:
             ui.paused_status()
 
 
 # ------------------CALL THE MAIN FUNCTION THAT RUNS THE GAME------------------
-play_breakout()
+play_breakout(paddle, ball, bricks, score, ui)
 
 tr.mainloop()
