@@ -4,7 +4,7 @@ Clone of Breakout Game built using python turtle.
 <h1> Guide to Building this Project </h1>
 
 <div>
-  <img src="./code_output.JPG" alt="Code Output">
+  <img src="./breakout.gif" alt="Code Output">
 </div>
 
 <p> 
